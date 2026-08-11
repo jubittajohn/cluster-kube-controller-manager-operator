@@ -58,14 +58,15 @@ func RunOperator(ctx context.Context, cc *controllercmd.ControllerContext) error
 	}
 	clusterInformers := v1helpers.NewKubeInformersForNamespaces(kubeClient, "")
 	configInformers := configinformers.NewSharedInformerFactory(configClient, 10*time.Minute)
+	// NamespaceAll ("") is intentionally not included — cluster-scoped static resources
+	// (ClusterRoles, ClusterRoleBindings) lose dynamic informer wiring but are still
+	// reconciled by the static resource controller on its 1-minute resync.
 	kubeInformersForNamespaces := v1helpers.NewKubeInformersForNamespaces(kubeClient,
-		"",
 		operatorclient.GlobalUserSpecifiedConfigNamespace,
 		operatorclient.GlobalMachineSpecifiedConfigNamespace,
 		operatorclient.OperatorNamespace,
 		operatorclient.TargetNamespace,
 		"kube-system",
-		"openshift-infra",
 	)
 
 	operatorClient, dynamicInformers, err := genericoperatorclient.NewStaticPodOperatorClient(
