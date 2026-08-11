@@ -81,8 +81,8 @@ func NewCSRController(
 		"kube-controller-manager",
 		operatorClient,
 		kubeInformersForNamespaces,
-		v1helpers.CachedSecretGetter(kubeClient.CoreV1(), kubeInformersForNamespaces),
-		v1helpers.CachedConfigMapGetter(kubeClient.CoreV1(), kubeInformersForNamespaces),
+		kubeClient.CoreV1(), // getters are cached by the controller
+		kubeClient.CoreV1(),
 		c.eventRecorder,
 	)
 	err := operatorresourcesync.AddSyncCSRControllerCA(c.resourceSyncController)

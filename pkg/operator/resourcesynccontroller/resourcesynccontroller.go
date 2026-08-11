@@ -45,8 +45,8 @@ func NewResourceSyncController(
 		"kube-controller-manager",
 		operatorConfigClient,
 		kubeInformersForNamespaces,
-		v1helpers.CachedSecretGetter(secretsGetter, kubeInformersForNamespaces),
-		v1helpers.CachedConfigMapGetter(configMapsGetter, kubeInformersForNamespaces),
+		secretsGetter, // getters are cached by the controller
+		configMapsGetter,
 		eventRecorder,
 	)
 	if err := AddSyncCSRControllerCA(resourceSyncController); err != nil {

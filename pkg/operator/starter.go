@@ -105,8 +105,8 @@ func RunOperator(ctx context.Context, cc *controllercmd.ControllerContext) error
 	resourceSyncController, err := resourcesynccontroller.NewResourceSyncController(
 		operatorClient,
 		kubeInformersForNamespaces,
-		v1helpers.CachedSecretGetter(kubeClient.CoreV1(), kubeInformersForNamespaces),
-		v1helpers.CachedConfigMapGetter(kubeClient.CoreV1(), kubeInformersForNamespaces),
+		kubeClient.CoreV1(), // getters are cached by the controller
+		kubeClient.CoreV1(),
 		cc.EventRecorder,
 	)
 	if err != nil {
